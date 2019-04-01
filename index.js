@@ -94,7 +94,7 @@ var imageSchema = mongoose.Schema({
     email:{type:String,
       required :true,
   },
-    image_link:{type: String,
+    link:{type: String,
       required: false,
     }
 });
@@ -478,6 +478,35 @@ app.get('/privacy', function(req, res) {
 });
 
 
+app.get('/enter_links', function(req, res) {
+  res.render('enter_links');
+});
+
+
+
+app.post('/enter_links',function (req,res) {
+  var name = req.body.name;
+  var email = req.body.email;
+  var link = req.body.link;
+  var image = new Image({
+    name : name,
+    email : email,
+    link : link,
+  });
+  image.save(function (err) {
+    if(err)
+    {
+      console.log("ERRONN");
+    }
+    else
+    {
+      res.redirect('/login');
+    }
+  });
+});
+
+
+
 app.get('/images', function(req, res) {
   res.render('images');
 });
@@ -485,6 +514,15 @@ app.get('/images', function(req, res) {
 
 
 app.post('/images',function(req, res){
+
+
+	var name = req.body.name;
+	var email = req.body.email;
+	Image.find({"email" : email },function(err,res2){
+	var link2 = res2[0].link;
+    console.log(link2); 
+          
+
 
 
   nodemailer.createTestAccount((err, account) => {
@@ -502,20 +540,20 @@ app.post('/images',function(req, res){
     });
 
 
-var text = 'Hi ' + req.body.name  + ' You can now download your images from here';
+var text = 'Hi ' + name  + ' You can now download your images from here ' + link2;
 
 
     let mailOptions = {
         from: process.env.gmail_id,
-        to: req.body.email,
+        to: email,
         subject: 'Your Images',
         text: text,
-        attachments: [
-       	{   // use URL as an attachment
-            filename: 'shubham1.jpg',
-            path: '/home/shkamboj/images_mail/images/shubham1.jpg'
-        }
-       ]
+       //  attachments: [
+       // 	{   // use URL as an attachment
+       //      filename: 'shubham1.jpg',
+       //      href: link,
+       //  }
+       // ]
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -527,6 +565,8 @@ var text = 'Hi ' + req.body.name  + ' You can now download your images from here
   }
     });
 });
+});
+
 });
 
 
