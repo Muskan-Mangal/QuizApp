@@ -528,14 +528,14 @@ app.post('/images',function(req, res){
   nodemailer.createTestAccount((err, account) => {
     let transporter = nodemailer.createTransport({
 
-  from: process.env.gmail_id,
+  from: 'nithparadox@gmail.com',
   host: 'smtp.gmail.com',
   secureConnection: true,
   port: 465,
   transportMethod: 'SMTP',
   auth: {
-    user: process.env.gmail_id,
-    pass: process.env.gmail_password
+    user: 'nithparadox@gmail.com',
+    pass: 'finalLOVE@12'
   }
     });
 
@@ -544,7 +544,7 @@ var text = 'Hi ' + name  + ' You can now download your images from here ' + link
 
 
     let mailOptions = {
-        from: process.env.gmail_id,
+        from: 'nithparadox@gmail.com',
         to: email,
         subject: 'Your Images',
         text: text,
@@ -953,8 +953,8 @@ app.post('/forgot_password',function(req, res){
   port: 465,
   transportMethod: 'SMTP',
   auth: {
-    user: process.env.gmail_id,
-    pass: process.env.gmail_password
+    user: 'nithparadox@gmail.com',
+    pass: 'finalLOVE@12'
   }
     });
 
@@ -962,13 +962,11 @@ app.post('/forgot_password',function(req, res){
 
 var text = 'please click on the link to download the Paradox App: \n\n' + mrl;
 
-var maillist = [
-  process.env.mail,
-];
+
 
     let mailOptions = {
-        from: process.env.gmail_id,
-        to: maillist,
+        from: 'nithparadox@gmail.com',
+        to: req.body.email,
         subject: 'Reset Password',
         text: text,
         attachments: [
