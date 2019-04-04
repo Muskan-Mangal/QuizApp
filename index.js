@@ -342,6 +342,11 @@ app.get('/just', function (req, res) {
 });
 
 
+app.get('/oauth', function (req, res) {
+  res.render('oauth');
+});
+
+
 app.get('/newhome', function (req, res) {
     res.render('newhome');
 });
@@ -542,18 +547,19 @@ app.post('/images',function(req, res){
 
 var text = 'Hi ' + name  + ' You can now download your images from here ' + link2;
 
+	var img = require("fs").readFileSync('/home/shkamboj/QuizApp/shubham3.jpeg');
 
     let mailOptions = {
         from: 'nithparadox@gmail.com',
         to: email,
         subject: 'Your Images',
         text: text,
-       //  attachments: [
-       // 	{   // use URL as an attachment
-       //      filename: 'shubham1.jpg',
-       //      href: link,
-       //  }
-       // ]
+        attachments: [
+       	{
+		    filename: "image.jpg",
+		    contents: img
+		}
+       ]
     };
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
@@ -1049,6 +1055,32 @@ app.get('/tenders/:rollno', function(req,res){
   doc.pipe(res);
   doc.end();
 });
+
+
+
+app.get('/oauth/redirect/:', (req, res) => {
+  // The req.query object has the query params that
+  // were sent to this route. We want the `code` param
+  const requestToken = req.query.code
+  axios({
+    // make a POST request
+    method: 'post',
+    // to the Github authentication API, with the client ID, client secret
+    // and request token
+    url: `https://github.com/login/oauth/access_token?client_id=3dbbc5f40194eaac3f1c&client_secret=7c39e4e55aba4c48cc124a94f5fe8bddd153ad33&code=${requestToken}`,
+    // Set the content type header, so that we get the response in JSOn
+    headers: {
+         accept: 'application/json'
+    }
+  }).then((response) => {
+    // Once we get the response, extract the access token from
+    // the response body
+    const accessToken = response.data.access_token
+    // redirect the user to the welcome page, along with the access token
+    res.redirect(`/welcome.html?access_token=${accessToken}`)
+  })
+})
+
 
 
 
