@@ -538,14 +538,14 @@ app.post('/images',function(req, res){
   nodemailer.createTestAccount((err, account) => {
     let transporter = nodemailer.createTransport({
 
-  from: 'nithparadox@gmail.com',
+  from: 'email here',
   host: 'smtp.gmail.com',
   secureConnection: true,
   port: 465,
   transportMethod: 'SMTP',
   auth: {
-    user: 'nithparadox@gmail.com',
-    pass: 'finalLOVE@12'
+    user: 'email here',
+    pass: 'password here'
   }
     });
 
@@ -555,7 +555,7 @@ var text = 'Hi ' + name  + ' You can now download your images from here ' + link
 	var img = require("fs").readFileSync('/home/shkamboj/QuizApp/shubham3.jpeg');
 
     let mailOptions = {
-        from: 'nithparadox@gmail.com',
+        from: 'email here',
         to: email,
         subject: 'Your Images',
         text: text,
@@ -967,14 +967,14 @@ app.post('/forgot_password',function(req, res){
   nodemailer.createTestAccount((err, account) => {
     let transporter = nodemailer.createTransport({
 
-  from: 'nithparadox@gmail.com',
+  from: 'email here',
   host: 'smtp.gmail.com',
   secureConnection: true,
   port: 465,
   transportMethod: 'SMTP',
   auth: {
-    user: 'nithparadox@gmail.com',
-    pass: 'finalLOVE@12'
+    user: 'email here',
+    pass: 'password here'
   }
     });
 
@@ -985,7 +985,7 @@ var text = 'please click on the link to download the Paradox App: \n\n' + mrl;
 
 
     let mailOptions = {
-        from: 'nithparadox@gmail.com',
+        from: 'email here',
         to: req.body.email,
         subject: 'Reset Password',
         text: text,
