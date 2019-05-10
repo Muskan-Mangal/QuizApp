@@ -351,6 +351,11 @@ app.get('/newhome', function (req, res) {
     res.render('newhome');
 });
 
+app.get('/json', function (req, res) {
+   var arr = [1,2,3,4,5];
+    res.json(arr);
+});
+
 app.get('/password', function (req, res) {
     res.render('password');
 });
@@ -826,6 +831,15 @@ app.get('/leaderboard/:topic',(req , res) =>{
         if (err) return console.log(err);
 
         res.render('leader',{Test: i});
+     })
+ });
+
+app.get('/leaderboard_json/:topic',(req , res) =>{
+  let par1 = req.params.topic;
+    Test.find({"topic" : par1}).sort({percentage: 'desc'}).exec(function(err , i){
+        if (err) return console.log(err);
+
+        res.json({Test:i});
      })
  });
 
