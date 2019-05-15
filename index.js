@@ -15,6 +15,7 @@ var
   quizzer = require('node-quizzer'),
   passwordHash = require('password-hash'),
   _ = require('underscore-node'),
+  mcache = require('memory-cache'),
   getQuiz = function(method, req) {
     var urlParts = url.parse(req.url, true),
       query = urlParts.query,
@@ -61,6 +62,29 @@ var
 // var bcrypt = require('bcrypt-nodejs');
 // var crypto = require('crypto');
 // var passportfb = require('passport-facebook');
+
+var cache = (duration) => {
+	return (req, res, next) => {
+		let key = '__express__'+req.originalUrl || req.url
+		let cachedBody = mcache.get(key)
+		if(cachedBody)
+		{
+			res.send(cachedBody)
+			return;
+		}
+		else
+		{
+			res.sendResponse = res.send
+			res.send = (body) => {
+				mcache.put(key, body, duration*1000);
+				res.sendResponse(body)
+
+			}
+			next()
+		}
+	}
+}
+
 
 
 var count=1;
@@ -376,7 +400,7 @@ app.post('/password',function (req,res) {
 
 
 
-app.get('/profile/:rollno', function(req, res)
+app.get('/profile/:rollno',cache(10), function(req, res)
 {
   if(req.session.rollno)
   {
