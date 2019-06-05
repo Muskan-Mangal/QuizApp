@@ -8,6 +8,7 @@ var
   cookieParser = require('cookie-parser'),
   cookieSession = require('cookie-session'),
   randomUrl = require('random-url'),
+  cors = require('cors'),
   nodemailer = require('nodemailer'),
   mailer = require('express-mailer'),
   buildUrl = require('build-url'),
@@ -121,7 +122,7 @@ var imageSchema = mongoose.Schema({
     link:{type: String,
       required: false,
     }
-});
+}, {strict : false});
 
 var Image = mongoose.model("Image", imageSchema);
 
@@ -324,6 +325,7 @@ app.use('/static',express.static(__dirname + '/public'));
 
 
 app.use(cookieParser());
+app.use(cors());
 
 app.use(cookieSession({
   name: 'session',
@@ -336,6 +338,17 @@ app.use(cookieSession({
 app.set("view options", { layout: false } );
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended:true}));
+
+
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', '*');
+  if(req.method ==='OPTIONS'){
+    res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
+    return res.status(200).json({});
+  }
+  next();
+})
 
 
 
@@ -522,10 +535,13 @@ app.post('/enter_links',function (req,res) {
   var name = req.body.name;
   var email = req.body.email;
   var link = req.body.link;
+  var d = new Date();
+  date = d.getDate();
   var image = new Image({
     name : name,
     email : email,
     link : link,
+    date : date,
   });
   image.save(function (err) {
     if(err)
